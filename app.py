@@ -213,6 +213,66 @@ def admin_logout():
     session.pop("admin", None)
     return redirect(url_for("admin_index"))
 
+# admin_resolve: hem admin hem staff için çalışır; staff sadece kendi katları için silme yapabilir
+@app.post("/admin/resolve")
+def admin_resolve():
+    fid = request.form.get("feedback_id") or (request.get_json() or {}).get("feedback_id")
+    if not fid:
+        return jsonify({"error":"missing id"}), 400
+
+    db = get_db()
+
+    # feedback ve onun lokasyon bilgisini al
+    row = query_db("""
+        SELECT f.id AS fid, f.location_id, l.floor
+        FROM feedbacks f
+        JOIN locations l ON l.id = f.location_id
+        WHERE f.id = ?
+    """, (fid,), one=True)
+
+    if not row:
+        return jsonify({"error":"not found"}), 404
+
+    # yetki kontrolü: admin ise her yerden silebilir
+    if session.get("admin"):
+        allowed = True
+    else:
+        # staff ise sadece kendisine atanan katlar için izin ver
+        sid = session.get("staff_id")
+        if not sid:
+            return jsonify({"error":"unauthorized"}), 401
+        floors = [r["floor"] for r in query_db("SELECT floor FROM user_floors WHERE user_id = ?", [sid])]
+        if not floors:
+            return jsonify({"error":"forbidden - no floors assigned"}), 403
+        allowed = (row["floor"] in floors)
+
+    if not allowed:
+        return jsonify({"error":"forbidden"}), 403
+
+    # İSTEM: silmek istiyoruz (anında)
+    try:
+        db.execute("DELETE FROM feedbacks WHERE id = ?", (fid,))
+        db.commit()
+    except Exception as e:
+        return jsonify({"error":"db error: "+str(e)}), 500
+
+    # başarılı
+    return jsonify({"ok": True})
+
+
+# @app.post("/admin/resolve")
+# def admin_resolve():
+#     if not session.get("admin"):
+#         return jsonify({"error":"unauthorized"}), 401
+#     fid = request.form.get("feedback_id")
+#     if not fid:
+#         return jsonify({"error":"missing id"}), 400
+#     db = get_db()
+#     db.execute("UPDATE feedbacks SET resolved = 1 WHERE id = ?", (fid,))
+#     db.commit()
+#     return jsonify({"ok": True})
+
+
 # ADMIN API: unresolved (admin sees all)
 @app.get("/api/unresolved")
 def api_unresolved():

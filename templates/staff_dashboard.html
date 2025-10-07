@@ -69,11 +69,31 @@
       } catch (e) { document.getElementById('listbox').innerText = 'Hata: ' + e; }
     }
 
+    // async function resolve(id) {
+    //   const fd = new FormData();
+    //   fd.append('feedback_id', id);
+    //   await fetch('/admin/resolve', { method: 'POST', body: fd });
+    //   fetchList();
+    // }
+
+    // 🔹 Güncellenmiş resolve() fonksiyonu
     async function resolve(id) {
-      const fd = new FormData();
-      fd.append('feedback_id', id);
-      await fetch('/admin/resolve', { method: 'POST', body: fd });
-      fetchList();
+      try {
+        const fd = new FormData();
+        fd.append('feedback_id', id);
+
+        const resp = await fetch('/staff/resolve', { method: 'POST', body: fd });
+        const j = await resp.json();
+
+        if (resp.ok && j.ok) {
+          // Başarılı — listeyi yenile veya kaldır
+          fetchList();
+        } else {
+          alert('Hata: ' + (j.error || resp.statusText || 'Bilinmeyen'));
+        }
+      } catch (e) {
+        alert('Ağ hatası: ' + e.message);
+      }
     }
 
     fetchList();
