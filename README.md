@@ -1,26 +1,23 @@
-# QR-Based Hospital Feedback System
+# QR-Based Feedback System
 
-A lightweight, QR-driven feedback collection system for hospitals.  
-Patients scan a QR code placed on doors or service points and instantly submit feedback through a simple web form.  
-This repository contains a modular and scalable implementation showcasing the core workflow from QR scan → survey → submission.
+A lightweight, QR-driven feedback collection platform designed for rapid, location-based user feedback. Users scan a QR code placed on service points and instantly submit feedback through a simple web form. This repository contains a modular and scalable implementation showcasing the core workflow from QR scan → survey → submission.
 
----
-
-## 📌 System Overview
-
-```mermaid
+## System Overview
+\```mermaid
 flowchart TD
-    A[QR Code on Door] --> B[Patient Scans QR]
+    A[QR Code at Location] --> B[User Scans QR]
     B --> C[Survey Page Opens]
     C --> D[User Submits Feedback]
     D --> E[Flask Backend Receives Data]
     E --> F[(SQLite Database)]
     F --> G[Admin / Staff Views Feedback]
+\```
 
-# Project Structure
+## Project Structure
+\```mermaid
 mindmap
   root((Project Structure))
-    App
+    Backend
       app.py
       db_init.py
       create_sample_data.py
@@ -29,28 +26,34 @@ mindmap
       templates/
       static/
     Database
-      SQLite data.db
+      SQLite (data.db)
       Migration Scripts
     Environment
       .env
       venv/
+\```
 
-# Features
+## Features
+\```mermaid
 graph LR
     A[QR Generation] --> B[Simplified Survey UI]
     B --> C[Location-Based Tracking]
     C --> D[SQLite Storage]
-    D --> E[Admin/Staff Resolve Actions]
+    D --> E[Admin/Staff View & Export Feedback]
+\```
 
-# Technologies Used
+## Technologies
+\```mermaid
 graph TD
     A[Python] --> B[Flask]
     A --> C[SQLite]
-    A --> D[qrcode Py Library]
+    A --> D[qrcode Library]
     B --> E[Jinja2 Templates]
     E --> F[HTML/CSS/JS]
+\```
 
-# How It Works
+## How It Works
+\```mermaid
 sequenceDiagram
     participant User
     participant QR as QR Code
@@ -60,35 +63,30 @@ sequenceDiagram
 
     User->>QR: Scan QR Code
     QR-->>Browser: Open location-specific URL
-    Browser->>Server: GET survey page
-    Server-->>Browser: Render HTML form
-    User->>Browser: Submits feedback
-    Browser->>Server: POST feedback data
+    Browser->>Server: GET /survey
+    Server-->>Browser: Render survey form
+    User->>Browser: Submit feedback
+    Browser->>Server: POST feedback
     Server->>DB: Insert record
     DB-->>Server: OK
-    Server-->>Browser: Thank you page
+    Server-->>Browser: Display Thank You Page
+\```
 
-# Road Map
+## Roadmap
+\```mermaid
 timeline
     title Production Roadmap
     Q1 : SMS Integration : Admin Login : Role Management
-    Q2 : 2000+ Location Setup : QR Design Templates : Mass QR Export
-    Q3 : Advanced Reporting Dashboard : Cloud / On-Prem Deployment
-    Q4 : Internal Network Optimization : Security Hardening : Backup Strategy
+    Q2 : Multi-Location Setup : QR Design Templates : Mass QR Export
+    Q3 : Reporting Dashboard : Cloud Deployment
+    Q4 : Security Hardening : Backup Strategy : Internal Optimization
+\```
 
-# Future Enhancements
-
-SMS notifications
-
-Full admin dashboard
-
-Secure API for mobile app integration
-
-Custom QR print designs
-
-Hospital network deployment
-
-Multi-location analytics
-
-Role-based user system
-
+## Future Enhancements
+- SMS notifications  
+- Full admin dashboard with charts  
+- Secure API for mobile app integration  
+- Custom QR design generator  
+- Multi-location analytics  
+- Role-based access control  
+- On-premise or cloud deployment options  
