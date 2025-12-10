@@ -1,92 +1,99 @@
-# QR-Based Feedback System
+QR-Based Feedback System
 
-A lightweight, QR-driven feedback collection platform designed for rapid, location-based user feedback. Users scan a QR code placed on service points and instantly submit feedback through a simple web form. This repository contains a modular and scalable implementation showcasing the core workflow from QR scan → survey → submission.
+This project provides a lightweight, QR-driven platform for collecting rapid, location-based user feedback. Users scan a QR code placed at service points and instantly access a simple web form where they can submit feedback. The system is modular, easy to deploy, and designed to work in internal networks or limited-access environments.
 
-## System Overview
-\```mermaid
-flowchart TD
-    A[QR Code at Location] --> B[User Scans QR]
-    B --> C[Survey Page Opens]
-    C --> D[User Submits Feedback]
-    D --> E[Flask Backend Receives Data]
-    E --> F[(SQLite Database)]
-    F --> G[Admin / Staff Views Feedback]
-\```
+Overview
 
-## Project Structure
-\```mermaid
-mindmap
-  root((Project Structure))
-    Backend
-      app.py
-      db_init.py
-      create_sample_data.py
-      generate_qr.py
-    Frontend
-      templates/
-      static/
-    Database
-      SQLite (data.db)
-      Migration Scripts
-    Environment
-      .env
-      venv/
-\```
+When a user scans a QR code, the system opens a URL tied to a specific location. The backend displays a survey page, receives the submitted data, and stores it in a SQLite database. Staff members can then review and export the collected feedback.
 
-## Features
-\```mermaid
-graph LR
-    A[QR Generation] --> B[Simplified Survey UI]
-    B --> C[Location-Based Tracking]
-    C --> D[SQLite Storage]
-    D --> E[Admin/Staff View & Export Feedback]
-\```
+Key Features
 
-## Technologies
-\```mermaid
-graph TD
-    A[Python] --> B[Flask]
-    A --> C[SQLite]
-    A --> D[qrcode Library]
-    B --> E[Jinja2 Templates]
-    E --> F[HTML/CSS/JS]
-\```
+QR code generation for each location
 
-## How It Works
-\```mermaid
-sequenceDiagram
-    participant User
-    participant QR as QR Code
-    participant Browser
-    participant Server as Flask Server
-    participant DB as SQLite DB
+Clean and minimal survey interface
 
-    User->>QR: Scan QR Code
-    QR-->>Browser: Open location-specific URL
-    Browser->>Server: GET /survey
-    Server-->>Browser: Render survey form
-    User->>Browser: Submit feedback
-    Browser->>Server: POST feedback
-    Server->>DB: Insert record
-    DB-->>Server: OK
-    Server-->>Browser: Display Thank You Page
-\```
+Location-based feedback tracking
 
-## Roadmap
-\```mermaid
-timeline
-    title Production Roadmap
-    Q1 : SMS Integration : Admin Login : Role Management
-    Q2 : Multi-Location Setup : QR Design Templates : Mass QR Export
-    Q3 : Reporting Dashboard : Cloud Deployment
-    Q4 : Security Hardening : Backup Strategy : Internal Optimization
-\```
+SQLite storage for quick setup
 
-## Future Enhancements
-- SMS notifications  
-- Full admin dashboard with charts  
-- Secure API for mobile app integration  
-- Custom QR design generator  
-- Multi-location analytics  
-- Role-based access control  
-- On-premise or cloud deployment options  
+Simple backend built with Flask
+
+Easy to deploy on internal servers or private networks
+
+Feedback export and review capabilities
+
+Project Structure
+
+Backend
+
+app.py — main application
+
+db_init.py — initial database setup
+
+create_sample_data.py — sample dataset generator
+
+generate_qr.py — QR code generator
+
+Frontend
+
+templates/ — HTML templates (Jinja2)
+
+static/ — CSS, JS, and assets
+
+Database
+
+data.db (SQLite)
+
+Migration scripts
+
+Environment
+
+.env for configuration
+
+venv/ for dependencies
+
+Technologies Used
+
+Python + Flask for server-side logic
+
+SQLite for lightweight, file-based storage
+
+Jinja2 templates for rendering pages
+
+HTML / CSS / JavaScript for UI
+
+qrcode Python library for QR generation
+
+How It Works (Flow)
+
+QR code is generated for a specific location.
+
+User scans the QR code using any mobile device.
+
+Browser opens the location-specific survey page.
+
+User fills out and submits the feedback form.
+
+Flask backend processes the data and stores it in SQLite.
+
+A confirmation/thank-you page is shown.
+
+Staff can later review, filter, or export feedback.
+
+Roadmap
+
+Planned improvements include:
+
+SMS or email notifications
+
+Full admin dashboard with charts and filters
+
+API endpoints for mobile app integration
+
+Custom QR print templates
+
+Multi-location analytics and heatmaps
+
+Role-based access control
+
+On-premise and cloud deployment options
